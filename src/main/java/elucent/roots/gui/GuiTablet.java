@@ -31,8 +31,11 @@ public class GuiTablet extends GuiScreen {
 	EntityPlayer player = null;
 	public GuiTablet(EntityPlayer p){
 		player = p;
-		if (p.getHeldItem(EnumHand.MAIN_HAND).hasTagCompound()){
+		if (p.getHeldItem(EnumHand.MAIN_HAND) != null && p.getHeldItem(EnumHand.MAIN_HAND).hasTagCompound()){
 			currentGroup = p.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().getInteger("currentGroup");
+		}
+		else if(p.getHeldItem(EnumHand.OFF_HAND) != null && p.getHeldItem(EnumHand.OFF_HAND).hasTagCompound()){
+			currentGroup = p.getHeldItem(EnumHand.OFF_HAND).getTagCompound().getInteger("currentGroup");
 		}
 	}
 	
@@ -72,12 +75,25 @@ public class GuiTablet extends GuiScreen {
 			}
 		}
 		if (currentGroup != 0){
-			player.getHeldItem(EnumHand.MAIN_HAND).setTagCompound(new NBTTagCompound());
-			player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().setInteger("currentGroup", currentGroup);
+			if(player.getHeldItem(EnumHand.MAIN_HAND) != null){
+				player.getHeldItem(EnumHand.MAIN_HAND).setTagCompound(new NBTTagCompound());
+				player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().setInteger("currentGroup", currentGroup);
+			}
+			else{
+				player.getHeldItem(EnumHand.OFF_HAND).setTagCompound(new NBTTagCompound());
+				player.getHeldItem(EnumHand.OFF_HAND).getTagCompound().setInteger("currentGroup", currentGroup);
+			}
 		}
 		else {
-			if (player.getHeldItem(EnumHand.MAIN_HAND).hasTagCompound()){
-				player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().removeTag("currentGroup");
+			if(player.getHeldItem(EnumHand.MAIN_HAND) != null){
+				if (player.getHeldItem(EnumHand.MAIN_HAND).hasTagCompound()){
+					player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().removeTag("currentGroup");
+				}
+			}	
+			else{
+				if (player.getHeldItem(EnumHand.OFF_HAND).hasTagCompound()){
+					player.getHeldItem(EnumHand.OFF_HAND).getTagCompound().removeTag("currentGroup");
+				}
 			}
 		}
 	}
